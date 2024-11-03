@@ -124,17 +124,12 @@
     <script>
         document.getElementById('getDownloadLinkButton').addEventListener('click', async () => {
     const iframeCode = document.getElementById("iframeInput").value;
-
-    if (!iframeCode) {
-        alert("Please enter the iframe code.");
-        return;
-    }
-
     const downloadLinkBox = document.getElementById("downloadLink");
+
     downloadLinkBox.value = "Fetching download link...";
 
     try {
-        const response = await fetch('/api/get-download-link', {
+        const response = await fetch('/api/get-download-link', {  // Ensure this is a POST request
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -149,6 +144,7 @@
         downloadLinkBox.value = "An error occurred while fetching the download link.";
     }
 });
+
 
 
         document.getElementById('copyButton').addEventListener('click', () => {
