@@ -123,29 +123,28 @@
 
     <script>
         document.getElementById('getDownloadLinkButton').addEventListener('click', async () => {
-    const iframeCode = document.getElementById("iframeInput").value;
-    const downloadLinkBox = document.getElementById("downloadLink");
+            const iframeCode = document.getElementById("iframeInput").value;
+            const downloadLinkBox = document.getElementById("downloadLink");
 
-    downloadLinkBox.value = "Fetching download link...";
+            downloadLinkBox.value = "Fetching download link...";
 
-    try {
-        const response = await fetch('/api/get-download-link', {  // Ensure this is a POST request
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ iframeCode })
+            try {
+                const response = await fetch('http://localhost:3000/api/get-download-link', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ iframeCode })
+                });
+
+                const result = await response.json();
+
+                downloadLinkBox.value = result.error || result.downloadLink;
+            } catch (error) {
+                console.error("Error details:", error);
+                downloadLinkBox.value = "An error occurred while fetching the download link.";
+            }
         });
-
-        const result = await response.json();
-        downloadLinkBox.value = result.error || result.downloadLink;
-    } catch (error) {
-        console.error("Error details:", error);
-        downloadLinkBox.value = "An error occurred while fetching the download link.";
-    }
-});
-
-
 
         document.getElementById('copyButton').addEventListener('click', () => {
             const downloadLinkBox = document.getElementById("downloadLink");

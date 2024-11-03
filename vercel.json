@@ -12,7 +12,11 @@
   "routes": [
     {
       "src": "/api/get-download-link",
-      "dest": "api/get-download-link.js"
+      "dest": "/api/get-download-link.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.html"
     }
   ]
 }
