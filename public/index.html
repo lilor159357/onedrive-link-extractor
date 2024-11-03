@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract and Get OneDrive Download Link</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #333333;
+            text-align: center;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #555555;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #0078d4;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #005ea6;
+        }
+
+        .output-container {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .output-label {
+            font-size: 0.9rem;
+            color: #333333;
+            flex: 1;
+        }
+
+        .output-textarea {
+            flex: 3;
+            height: 50px;
+            font-size: 1rem;
+            background-color: #f8f9fa;
+            color: #333333;
+        }
+
+        .copy-button {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            color: #ffffff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Extract OneDrive Download Link</h1>
+        <label for="iframeInput">OneDrive iframe Code:</label>
+        <textarea id="iframeInput" placeholder="Enter OneDrive iframe code"></textarea>
+        <button class="button" id="getDownloadLinkButton">Get Download Link</button>
+        
+        <div class="output-container">
+            <textarea id="downloadLink" class="output-textarea" readonly></textarea>
+            <button class="copy-button" id="copyButton">Copy</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('getDownloadLinkButton').addEventListener('click', async () => {
+            const iframeCode = document.getElementById("iframeInput").value;
+            const downloadLinkBox = document.getElementById("downloadLink");
+
+            downloadLinkBox.value = "Fetching download link...";
+
+            try {
+                const response = await fetch('http://localhost:3000/get-download-link', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ iframeCode })
+                });
+
+                const result = await response.json();
+
+                downloadLinkBox.value = result.error || result.downloadLink;
+            } catch (error) {
+                console.error("Error details:", error);
+                downloadLinkBox.value = "An error occurred while fetching the download link.";
+            }
+        });
+
+        document.getElementById('copyButton').addEventListener('click', () => {
+            const downloadLinkBox = document.getElementById("downloadLink");
+            downloadLinkBox.select();
+            downloadLinkBox.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(downloadLinkBox.value)
+                .then(() => {
+                    alert("Download link copied to clipboard!");
+                })
+                .catch((error) => {
+                    console.error("Error copying text: ", error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "onedrive-link-extractor",
+  "version": "1.0.0",
+  "description": "An app to extract OneDrive download links from iframe code",
+  "main": "index.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "follow-redirects": "^1.15.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "^18.0"
+  },
+  "license": "MIT"
+}

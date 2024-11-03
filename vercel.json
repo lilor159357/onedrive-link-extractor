@@ -1,0 +1,18 @@
+{
+  "builds": [
+    {
+      "src": "api/get-download-link.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/get-download-link",
+      "dest": "api/get-download-link.js"
+    }
+  ]
+}
