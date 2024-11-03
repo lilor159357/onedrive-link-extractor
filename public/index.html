@@ -129,7 +129,7 @@
             downloadLinkBox.value = "Fetching download link...";
 
             try {
-                const response = await fetch('http://localhost:3000/api/get-download-link', {
+                const response = await fetch('/api/get-download-link', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
