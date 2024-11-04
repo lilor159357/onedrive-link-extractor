@@ -1,4 +1,15 @@
 {
+  "headers": [
+    {
+      "source": "/favicon.png",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/png"
+        }
+      ]
+    }
+  ],
   "builds": [
     {
       "src": "api/get-download-link.js",
