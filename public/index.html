@@ -4,8 +4,8 @@
     <link rel="icon" href="./favicon.png?v=2" sizes="any" type="image/png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extract and Get OneDrive Download Link</title>
-    <style>
+    <title>Extract and Get Box Download Link</title>
+     <style>
         * {
             box-sizing: border-box;
             margin: 0;
@@ -111,9 +111,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Extract OneDrive Download Link</h1>
-        <label for="iframeInput">OneDrive iframe Code:</label>
-        <textarea id="iframeInput" placeholder="Enter OneDrive iframe code"></textarea>
+        <h1>Extract Box Download Link</h1>
+        <label for="boxLinkInput">Box File Link:</label>
+        <textarea id="boxLinkInput" placeholder="Enter Box file link"></textarea>
         <button class="button" id="getDownloadLinkButton">Get Download Link</button>
         
         <div class="output-container">
@@ -124,7 +124,7 @@
 
     <script>
         document.getElementById('getDownloadLinkButton').addEventListener('click', async () => {
-            const iframeCode = document.getElementById("iframeInput").value;
+            const boxLink = document.getElementById("boxLinkInput").value;
             const downloadLinkBox = document.getElementById("downloadLink");
 
             downloadLinkBox.value = "Fetching download link...";
@@ -135,7 +135,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ iframeCode })
+                    body: JSON.stringify({ boxLink })
                 });
 
                 const result = await response.json();
