@@ -5,43 +5,42 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Only POST requests are allowed.' });
     }
 
-    const { originalLink } = req.body;
+    const { boxLink } = req.body;
 
-    // Check if originalLink is undefined or empty
-    if (!originalLink) {
-        return res.status(400).json({ error: "originalLink is missing or undefined." });
+    // Check if boxLink is undefined or empty
+    if (!boxLink) {
+        return res.status(400).json({ error: "boxLink is missing or undefined." });
     }
 
     try {
-        const protocol = originalLink.startsWith('https') ? https : http;
+        const protocol = boxLink.startsWith('https') ? https : http;
 
-        protocol.get(originalLink, (response) => {
-            const redirectedUrl = response.responseUrl || response.headers.location;
+        // Follow redirects to get the final link
+        protocol.get(boxLink, (response) => {
+            const finalUrl = response.responseUrl || response.headers.location;
 
-            if (!redirectedUrl) {
-                return res.status(400).json({ error: "Redirect failed. No redirected URL found." });
+            if (!finalUrl) {
+                return res.status(400).json({ error: "Failed to follow redirect. No final URL found." });
             }
 
-            // Extract file ID and shared name from the redirected URL
-            const regex = /https:\/\/app\.box\.com\/file\/(\d+)\?s=([\w]+)/;
-            const match = redirectedUrl.match(regex);
+            const regex = /https:\/\/app\.box\.com\/file\/(\d+)\?s=([\w-]+)/;
+            const match = finalUrl.match(regex);
 
             if (!match) {
-                return res.status(400).json({ error: "Invalid redirected URL format." });
+                return res.status(400).json({ error: "Invalid Box file URL format." });
             }
 
             const fileId = match[1];
             const sharedName = match[2];
 
-            // Construct the final download link
             const downloadLink = `https://app.box.com/index.php?rm=box_download_shared_file&shared_name=${sharedName}&file_id=f_${fileId}`;
             res.json({ downloadLink });
         }).on('error', (error) => {
-            console.error("Redirect error:", error);
-            res.status(500).json({ error: "An error occurred while following the redirect." });
+            console.error("Error following redirects:", error);
+            res.status(500).json({ error: "An error occurred while following redirects." });
         });
     } catch (error) {
-        console.error("Error details:", error);
-        res.status(500).json({ error: "An error occurred while processing the request." });
+        console.error("Error processing request:", error);
+        res.status(500).json({ error: "An unexpected error occurred." });
     }
 };
